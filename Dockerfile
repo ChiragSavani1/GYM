@@ -1,11 +1,13 @@
-# Start from an official PHP image with Apache
 FROM php:8.2-apache
 
-# Enable Apache rewrite module
+# Install mysqli extension
+RUN docker-php-ext-install mysqli
+
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy everything in your project folder into Apache's web directory
-COPY . /var/www/html/
+# Optional: Set index.php as the default landing page
+RUN echo "DirectoryIndex index.php" >> /etc/apache2/apache2.conf
 
-# Optional: fix permissions
-RUN chown -R www-data:www-data /var/www/html
+# Copy project files
+COPY . /var/www/html/
